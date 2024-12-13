@@ -10,8 +10,9 @@ substitutions:
 
 # This should point to the public location of this yaml file.
 dashboard_import:
-  package_import_url: github//bnevets27/ESPHome-Projects/globe-ir-remote.yaml
+  package_import_url: github://bnevets27/ESPHome-Projects/globe-ir-remote.yaml@main
   import_full_config: true
+
 
 esphome:
   name: ${name}
@@ -21,6 +22,10 @@ esphome:
   project:
     name: ${project_name}
     version: ${project_version}
+
+### Device Sepcific ###
+  platform: ESP8266
+  board: esp01_1m
 
 time:
   - platform: sntp
@@ -61,21 +66,6 @@ sensor:
     update_interval: 60s
     entity_category: "diagnostic"
 
-button:
-  - platform: restart
-    name: Reboot
-    icon: mdi:power-cycle
-    entity_category: diagnostic
-  - platform: safe_mode
-    name: "Safe Mode"
-    entity_category: diagnostic
-
-binary_sensor:
-  - platform: status
-    name: Online Status
-    id: ink_ha_connected
-    entity_category: "diagnostic"
-
 debug:
 
 
@@ -105,9 +95,6 @@ web_server:
 
 
 ########### Set device attributes #########
-esphome:
-  platform: ESP8266
-  board: esp01_1m
 
 # Enable logging without UART support as there would be no way to read it
 logger:
@@ -132,11 +119,17 @@ remote_transmitter:
 
 # Enable the underside button.
 binary_sensor:
+### Generic ###  
   - platform: gpio
     pin:
       number: GPIO13
       inverted: true
     name: Underside Button
+### Device Specific ###  
+  - platform: status
+    name: Online Status
+    id: ink_ha_connected
+    entity_category: "diagnostic"
 
 ######## Examples ###########
 
@@ -156,6 +149,15 @@ switch:
           data: 0xE0E019E6
 
 button:
+### Generic ###  
+  - platform: restart
+    name: Reboot
+    icon: mdi:power-cycle
+    entity_category: diagnostic
+  - platform: safe_mode
+    name: "Safe Mode"
+    entity_category: diagnostic
+### Device Specific ###  
   - platform: template
     name: Logitech Vol Up
     on_press:
