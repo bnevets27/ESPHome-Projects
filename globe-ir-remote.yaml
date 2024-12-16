@@ -33,31 +33,37 @@ time:
 ######## Diagnostics ##########
 text_sensor:
   - platform: template
-    name: Hardware Info
+    name: "Hardware Info"
     entity_category: diagnostic
     update_interval: 24h
     lambda: return {"$hardware_info"};
   - platform: version
-    name: ESPHome Version
+    name: "ESPHome Version"
   - platform: wifi_info
     ip_address:
-      name: IP Address
+      name: "ESP IP Adress"
+      icon: mdi:ip-network-outline
+    mac_address:
+      name: "ESP MAC Adress"
+      icon: mdi:network-outline
     ssid:
-      name: AP SSID  
+      name: "AP SSID"
+      icon: mdi:access-point
     bssid:
-      name: AP MAC
+      name: "AP MAC Address"
+      icon: mdi:access-point
     # scan_results:
     #   name: Wifi Latest Scan Results 
 
 sensor:
   - platform: uptime
-    name: Uptime
+    name: "Uptime"
     id: sys_uptime
     update_interval: 60s
     entity_category: "diagnostic"
 
   - platform: wifi_signal
-    name: Signal
+    name: "Signal"
     id: wifi_signal_db
     update_interval: 60s
     entity_category: "diagnostic"
@@ -71,7 +77,7 @@ api:
 # OTA is required for Over-the-Air updating
 ota:
   - platform: esphome
-    #password: ${name} # ${name} won't work with name_add_mac_suffix because the name changes
+    password: ${device_name}
     id: ota_esphome
   - platform: http_request
     id: ota_http_request
@@ -84,7 +90,6 @@ captive_portal:
 wifi:
   # Set up a wifi access point
   ap:
-    ssid: ${friendly_name}
 
 web_server:
   port: 80
@@ -103,22 +108,12 @@ status_led:
     number: GPIO4
 
 # Enable the IR receiver to dump all IR commands to the log. Change dump type to your capture remote type. Use the captured IR command to replicate that IR command. You can disable this part when you aren't capturing IR command data.
-# Toggle switch added
 remote_receiver:
   id: my_remote
   pin:
     number: GPIO5  # Unused pin to disable the receiver by default. The correct pin is: GPIO5 which will enable it. There is a switch to enable this "Learn IR Enable" GPIO16
     inverted: true
   dump: all
-  on_raw:
-    then:
-      - if:
-          condition:
-            switch.is_on: ir_receiver_enable  # Only process signals if the switch is ON
-          then:
-            - logger.log: "IR Signal Received and Processed"
-          else:
-            - logger.log: "IR Signal Ignored"
 
 # Enable the remote transmitter
 remote_transmitter:
@@ -137,22 +132,16 @@ binary_sensor:
     pin:
       number: GPIO13
       inverted: true
-    name: Underside Button
+    name: "Underside Button"
+    id: underside_button
     disabled_by_default: true
+    on_click:
+      min_length: 15s
+      max_length: 60s
+      then:
+        button.press: factory_reset_all
 
 switch:
-### Generic ###
-  - platform: factory_reset
-    name: Factory Reset - Wipe All Settings
-    disabled_by_default: true
-    id: factory_reset_all
-    entity_category: diagnostic
-### Device Specific ###
-  # Switch to enable the remote receiver (IR Learn)
-  - platform: template
-    name: "IR Receiver Enable"
-    id: ir_receiver_enable
-    optimistic: true  # Ensure the state is retained without feedback
 ######## Examples ########### 
 # Simple example template switch to control the power of a Samsung TV using IR commands
   - platform: template
@@ -171,11 +160,17 @@ switch:
 button:
 ### Generic ###  
   - platform: restart
-    name: Reboot
+    name: "Reboot"
     icon: mdi:power-cycle
     entity_category: diagnostic
   - platform: safe_mode
     name: "Safe Mode"
+    entity_category: diagnostic
+  - platform: factory_reset
+    name: "Factory Reset - Wipe All"
+    disabled_by_default: true
+    id: factory_reset_all
+    icon: mdi:delete-forever
     entity_category: diagnostic
 ### Device Specific ###
 ### Put Leared Codes Here ###
