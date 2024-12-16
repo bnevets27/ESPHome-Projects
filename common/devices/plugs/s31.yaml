@@ -1,0 +1,60 @@
+substitutions:
+  restore_mode_relay: RESTORE_DEFAULT_ON
+  project_name: "Sonoff.S31_ESP8266_1M_CSE7766"
+  project_version: "0.0.1"
+  hardware_info: "Sonoff S31 ESP8266 1M CSE7766"
+
+esp8266:
+  board: esp01_1m
+  early_pin_init: false  # Prevent the physical relay flipping on reboot.
+  
+logger:
+  baud_rate: 0 # (UART logging disabled due to cse7766 power mon chip)
+
+uart:
+  rx_pin: RX
+  baud_rate: 4800
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO0
+      mode: INPUT_PULLUP
+      inverted: True
+    name: Button
+    on_press:
+      - switch.toggle: relay
+
+sensor:
+  - platform: cse7766
+    update_interval: 10s
+    current:
+      name: Amps
+      unit_of_measurement: A      
+      accuracy_decimals: 2
+    voltage:
+      name: Voltage
+      unit_of_measurement: V      
+      accuracy_decimals: 1
+    power:
+      name: Watts
+      accuracy_decimals: 0   
+      id: plug_power
+  - platform: total_daily_energy
+    name: Daily Energy
+    power_id: plug_power
+    filters:
+      - multiply: 0.001 ## convert Wh to kWh
+    unit_of_measurement: kWh
+
+switch:
+  - platform: gpio
+    name: Relay
+    pin: GPIO12
+    id: relay
+    restore_mode: ${restore_mode_relay}
+
+status_led:
+  pin:
+    number: GPIO13
+    inverted: True
