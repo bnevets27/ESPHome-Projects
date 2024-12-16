@@ -1,10 +1,7 @@
-substitutions:
-  name: ir-remote-test
-  friendly_name: ir-remote-test
-
-# Set device attributes
 esphome:
-  name: $name
+  name: ir-remote
+  friendly_name: IR-Remote
+  comment: Universal WiFi IR Blaster Remote
   platform: ESP8266
   board: esp01_1m
 
