@@ -1,0 +1,15 @@
+esphome:
+  name: ${name}
+  friendly_name: "${friendly_name}"
+  comment: "${device_description}"
+  name_add_mac_suffix: False
+
+time:
+  - platform: sntp
+    id: time_sntp
+    timezone: "America/Toronto"
+
+## OR
+# time:
+#   - platform: homeassistant
+#     id: homeassistant_time
