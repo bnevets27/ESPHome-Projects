@@ -80,7 +80,7 @@ status_led:
 remote_receiver:
   id: my_remote
   pin:
-    number: GPIO5  # Unused pin to disable the receiver by default. The correct pin is: GPIO5 which will enable it. There is a switch to enable this "Learn IR Enable" GPIO16
+    number: GPIO5
     inverted: true
   dump: all
 
@@ -141,7 +141,6 @@ button:
 ### Device Specific ###
 ### Put Leared Codes Here ###
 ######## Examples ########### 
-# Simple example template switch to control the power of a Samsung TV using IR commands
   - platform: template
     name: Logitech Vol Up
     on_press:
