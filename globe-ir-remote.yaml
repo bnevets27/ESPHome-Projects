@@ -71,7 +71,7 @@ api:
 # OTA is required for Over-the-Air updating
 ota:
   - platform: esphome
-    password: ${name}
+    #password: ${name} # ${name} won't work with name_add_mac_suffix because the name changes
     id: ota_esphome
   - platform: http_request
     id: ota_http_request
