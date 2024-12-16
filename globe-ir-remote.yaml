@@ -1,14 +1,11 @@
-# Notes about device here
 substitutions:
   name: ir-remote
   friendly_name: IR-Remote
   device_description: Universal WiFi IR Blaster Remote
   hardware_info: "TYSW-ESP8266"
-#### The Project information is required for adoption to work in the Dashboard. ####
-  project_name: "SB-Inovations.IR-Remote" # "Name.What_ever_you_want" # example: "Sonoff.S31_ESP8266_1M_CSE7766" must follow that format: word.word_word_word
+  project_name: "SB-Inovations.IR-Remote"
   project_version: "0.0.2"
 
-# This should point to the public location of this yaml file.
 dashboard_import:
   package_import_url: github://bnevets27/ESPHome-Projects/globe-ir-remote.yaml@main
   import_full_config: true
@@ -21,7 +18,6 @@ esphome:
   project:
     name: ${project_name}
     version: ${project_version}
-### Device Sepcific ###
   platform: ESP8266
   board: esp01_1m
 
@@ -30,7 +26,6 @@ time:
     id: time_sntp
     timezone: "America/Toronto"
 
-######## Diagnostics ##########
 text_sensor:
   - platform: template
     name: "Hardware Info"
@@ -52,8 +47,6 @@ text_sensor:
     bssid:
       name: "AP MAC Address"
       icon: mdi:access-point
-    # scan_results:
-    #   name: Wifi Latest Scan Results 
 
 sensor:
   - platform: uptime
@@ -70,11 +63,8 @@ sensor:
 
 debug:
 
-####### Networking ###############
-# API is a requirement of the dashboard import.
 api:
 
-# OTA is required for Over-the-Air updating
 ota:
   - platform: esphome
     password: ${device_name}
@@ -88,46 +78,34 @@ http_request:
 captive_portal:
 
 wifi:
-  # Set up a wifi access point
   ap:
 
 web_server:
   port: 80
-  # auth:
-  #   username: admin
-  #   password: !secret web_server_password
 
-########### Set device attributes #########
-# Enable logging without UART support as there would be no way to read it
 logger:
   baud_rate: 0
 
-# Enable external blue LED as a status indictator
 status_led:
   pin:
     number: GPIO4
 
-# Enable the IR receiver to dump all IR commands to the log. Change dump type to your capture remote type. Use the captured IR command to replicate that IR command. You can disable this part when you aren't capturing IR command data.
 remote_receiver:
   id: my_remote
   pin:
-    number: GPIO5  # Unused pin to disable the receiver by default. The correct pin is: GPIO5 which will enable it. There is a switch to enable this "Learn IR Enable" GPIO16
+    number: GPIO5
     inverted: true
   dump: all
 
-# Enable the remote transmitter
 remote_transmitter:
   pin: GPIO14
   carrier_duty_percent: 50%
 
-# Enable the underside button.
 binary_sensor:
-### Generic ###  
   - platform: status
     name: Online Status
     id: ink_ha_connected
     entity_category: "diagnostic"
-### Device Specific ###  
   - platform: gpio
     pin:
       number: GPIO13
@@ -142,23 +120,18 @@ binary_sensor:
         button.press: factory_reset_all
 
 switch:
-######## Examples ########### 
-# Simple example template switch to control the power of a Samsung TV using IR commands
   - platform: template
     name: "TV Power"
     optimistic: true
     assumed_state: true
     turn_on_action:
-      # Data would be the IR command captured in the log by the remote receiver
       - remote_transmitter.transmit_samsung:
           data: 0xE0E09966
     turn_off_action:
-      # Data would be the IR command captured in the log by the remote receiver
       - remote_transmitter.transmit_samsung:
           data: 0xE0E019E6
 
 button:
-### Generic ###  
   - platform: restart
     name: "Reboot"
     icon: mdi:power-cycle
@@ -172,10 +145,6 @@ button:
     id: factory_reset_all
     icon: mdi:delete-forever
     entity_category: diagnostic
-### Device Specific ###
-### Put Leared Codes Here ###
-######## Examples ########### 
-# Simple example template switch to control the power of a Samsung TV using IR commands
   - platform: template
     name: Logitech Vol Up
     on_press:
