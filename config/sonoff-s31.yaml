@@ -1,34 +1,21 @@
-# This version has the relay ENABLED
 substitutions:
-  restore_mode_relay: RESTORE_DEFAULT_ON
-  reset_button: GPIO0
-
-esphome:
-  name: "plug-s31"
-  friendly_name: "Plug-S31"
-  #device_description: "Sonoff S31 Power Monitor"
-  #hardware_info: "ESP8266"
-  project:
-    name: "SB-Inovations.Sonoff_S31"
-    version: "0.0.1"
-  name_add_mac_suffix: True
-
-
+  #hardware_info: "Disabled-Relay|ESP8266_1M|CSE7766"
+  #hardware_info: "Removed-Relay|ESP8266_1M|CSE7766"
+  
+# This should point to the public location of this yaml file.
 dashboard_import:
   package_import_url: github://bnevets27/ESPHome-Projects/config/sonoff-s31.yaml@main
   import_full_config: true
 
-#packages:
-#  device: !include common/devices/plugs/sonoff-s31.yaml
-#  base: !include common/base-8266.yaml
-
+## Note: Package order matters, they are loaded top down so, lowerest in the list overrites values of above packages
 packages:
   remote_package:
     url: https://github.com/bnevets27/ESPHome-Projects/
     ref: main
     files:
-      - common/base-generic.yaml
-      - common/base-diagnostic-8266.yaml
-      - common/base-network.yaml
-      - common/devices/plugs/sonoff-s31.yaml
+    - common/base-8266.yaml
+    #- common/base-generic.yaml
+    #- common/base-network.yaml
+    #- common/base-diagnostic-8266.yaml
+    - common/devices/plugs/sonoff-s31.yaml
     refresh: 0d
