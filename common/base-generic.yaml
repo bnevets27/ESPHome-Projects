@@ -13,6 +13,15 @@
 #    version: "${project_version}"
 #    name_add_mac_suffix: True
 
+esphome:
+hardware_info: "ESP8266"
+  project:
+    name: "SB-Inovations.Sonoff_S31"
+    version: "0.0.1"
+## Device Options ##
+  restore_mode_relay: RESTORE_DEFAULT_ON
+  reset_button: GPIO0
+
 time:
   - platform: sntp
     id: time_sntp
