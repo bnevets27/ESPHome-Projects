@@ -1,5 +1,4 @@
 substitutions:
-  hardware_info: "ESP8266"
   project:
     name: "SB-Inovations.Sonoff_S31"
     version: "0.0.1"
