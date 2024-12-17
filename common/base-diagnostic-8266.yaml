@@ -1,13 +1,13 @@
 substitutions:
+  project:
+    name: Undefined.Project
+    version: "0.0.1"
   hardware_info: Undefined Hardware
-  project_name: Undefined.Project
-  project_version: "0.0.1"
 
 esphome:
   project:
     name: ${project_name}
     version: ${project_version}
-
 
 text_sensor:
   - platform: template
