@@ -1,3 +1,6 @@
+substitutions:
+  reset_button: GPIO0
+
 binary_sensor:
   - platform: status
     name: Online Status
@@ -5,7 +8,7 @@ binary_sensor:
     entity_category: "diagnostic"
   - platform: gpio
     pin:
-      number: ${reset_button}
+      number: "${reset_button}"
       inverted: true
     name: "Reset Button"
     disabled_by_default: true
