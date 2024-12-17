@@ -1,8 +1,17 @@
+substitutions:
+  project:
+    name: Undefined.Project
+    version: "0.0.1"
+  hardware_info: Undefined Hardware
+
 esphome:
   name: ${name}
   friendly_name: "${friendly_name}"
   comment: "${device_description}"
-  name_add_mac_suffix: False
+  project:
+    name: ${project_name}
+    version: ${project_version}
+    name_add_mac_suffix: True
 
 time:
   - platform: sntp
