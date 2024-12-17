@@ -1,5 +1,5 @@
-substitutions:
-  reset_button: GPIO0
+#substitutions:
+#  reset_button: GPIO0
 
 binary_sensor:
   - platform: status
