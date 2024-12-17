@@ -1,4 +1,4 @@
 packages:
-  network: !include base-network-share.yaml
+  network: !include base-network.yaml
   diagnostics: !include base-diagnostic-8266.yaml
   generic: !include base-generic.yaml
