@@ -1,6 +1,3 @@
-esphome:
-  platform: ESP8266
-  
 packages:
   remote_package:
     url: https://github.com/bnevets27/ESPHome-Projects/
