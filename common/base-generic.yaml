@@ -1,8 +1,8 @@
-substitutions:
-  project:
-    name: Undefined.Project
-    version: "0.0.1"
-  hardware_info: Undefined Hardware
+#substitutions:
+#  project:
+#    name: Undefined.Project
+#    version: "0.0.1"
+#  hardware_info: Undefined Hardware
 
 esphome:
   name: ${name}
