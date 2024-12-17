@@ -1,0 +1,14 @@
+# This should point to the public location of this yaml file.
+dashboard_import:
+  package_import_url: github://bnevets27/ESPHome-Projects/config/tuya-ir_blaster.yaml@main
+  import_full_config: true
+
+## Note: Package order matters, they are loaded top down so, lowerest in the list overrites values of above packages
+packages:
+  remote_package:
+    url: https://github.com/bnevets27/ESPHome-Projects/
+    ref: main
+    files:
+    - common/base-8266.yaml
+    - common/devices/plugs/tuya-ir_blaster.yaml.yaml
+    refresh: 0d
