@@ -1,17 +1,6 @@
-substitutions:
-  hardware_info: "Disabled-Relay|ESP8266_1M|CSE7766"
-  #hardware_info: "Removed-Relay|ESP8266_1M|CSE7766"
-
-esphome:
-  name: "plug-s31"
-  name_add_mac_suffix: true
-
-esp8266:
-  board: esp01_1m
-  
 # This should point to the public location of this yaml file.
 dashboard_import:
-  package_import_url: github://bnevets27/ESPHome-Projects/config/sonoff-s31-no_relay.yaml@main
+  package_import_url: github://bnevets27/ESPHome-Projects/config/sonoff-s31.yaml@main
   import_full_config: true
 
 ## Note: Package order matters, they are loaded top down so, lowerest in the list overrites values of above packages
@@ -20,9 +9,6 @@ packages:
     url: https://github.com/bnevets27/ESPHome-Projects/
     ref: main
     files:
-    #- common/base-8266.yaml
-    - common/base-generic.yaml
-    - common/base-diagnostic-8266.yaml
-    - common/base-network.yaml
-    - common/devices/plugs/sonoff-s31-no_relay.yaml
+    - common/base-8266.yaml
+    - common/devices/plugs/sonoff-s31.yaml
     refresh: 0d
