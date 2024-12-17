@@ -1,3 +1,6 @@
+debug:
+  # update_interval: 10min # default 60 seconds
+  
 binary_sensor:
   - platform: status
     name: Online Status
@@ -53,6 +56,3 @@ button:
     id: factory_reset_all
     icon: mdi:delete-forever
     entity_category: diagnostic
-
-debug:
-  # update_interval: 10min # default 60 seconds
