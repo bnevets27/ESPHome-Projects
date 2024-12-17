@@ -14,8 +14,5 @@ packages:
     ref: main
     files:
     - common/base-8266.yaml
-    #- common/base-generic.yaml
-    #- common/base-network.yaml
-    #- common/base-diagnostic-8266.yaml
     - common/devices/plugs/sonoff-s31.yaml
     refresh: 0d
