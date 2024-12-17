@@ -4,6 +4,15 @@
 #    version: "0.0.1"
 #  hardware_info: Undefined Hardware
 
+substitutions:
+  name: "plug-s31"
+  friendly_name: "Plug-S31"
+  device_description: "Sonoff S31 Power Monitor"
+  #hardware_info: "ESP8266"
+  project:
+    name: "SB-Inovations.Sonoff_S31"
+    version: "0.0.1"
+
 esphome:
   name: "${name}"
   friendly_name: "${friendly_name}"
