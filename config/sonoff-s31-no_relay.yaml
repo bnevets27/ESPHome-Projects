@@ -1,6 +1,13 @@
 substitutions:
   hardware_info: "Disabled-Relay|ESP8266_1M|CSE7766"
   #hardware_info: "Removed-Relay|ESP8266_1M|CSE7766"
+
+esphome:
+  name: "plug-s31"
+  name_add_mac_suffix: true
+
+esp8266:
+  board: esp01_1m
   
 # This should point to the public location of this yaml file.
 dashboard_import:
@@ -13,6 +20,9 @@ packages:
     url: https://github.com/bnevets27/ESPHome-Projects/
     ref: main
     files:
-    - common/base-8266.yaml
+    #- common/base-8266.yaml
+    - common/base-generic.yaml
+    - common/base-diagnostic-8266.yaml
+    - common/base-network.yaml
     - common/devices/plugs/sonoff-s31-no_relay.yaml
     refresh: 0d
