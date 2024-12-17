@@ -9,6 +9,9 @@ packages:
     url: https://github.com/bnevets27/ESPHome-Projects/
     ref: main
     files:
-    - common/base-8266.yaml
-    - common/devices/plugs/sonoff-s31.yaml
+    #- common/base-8266.yaml
+    - common/base-generic.yaml
+    - common/base-diagnostic-8266.yaml
+    - common/base-network.yaml
+    - common/devices/plugs/sonoff-s31-no_relay.yaml
     refresh: 0d
