@@ -1,5 +1,5 @@
 substitutions:
-  hardware_info: "Sonoff S31 ESP8266 1M CSE7766"
+  #hardware_info: "Sonoff S31 ESP8266 1M CSE7766"
   project:
     name: "SB-Inovations.Sonoff_S31"
     version: "0.0.1"
