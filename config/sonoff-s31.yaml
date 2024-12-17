@@ -1,8 +1,18 @@
 # This version has the relay ENABLED
 substitutions:
+  restore_mode_relay: RESTORE_DEFAULT_ON
+  reset_button: GPIO0
+
+esphome:
   name: "plug-s31"
   friendly_name: "Plug-S31"
-  device_description: "Sonoff S31 Power Monitor"
+  #device_description: "Sonoff S31 Power Monitor"
+  #hardware_info: "ESP8266"
+  project:
+    name: "SB-Inovations.Sonoff_S31"
+    version: "0.0.1"
+  name_add_mac_suffix: True
+
 
 dashboard_import:
   package_import_url: github://bnevets27/ESPHome-Projects/config/sonoff-s31.yaml@main
