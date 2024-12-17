@@ -55,7 +55,7 @@ switch:
     name: Relay
     pin: GPIO12
     id: relay
-    restore_mode: restore_mode_relay
+    restore_mode: ${restore_mode_relay}
     
 status_led:
   pin:
