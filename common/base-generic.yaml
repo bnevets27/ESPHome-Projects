@@ -4,14 +4,14 @@
 #    version: "0.0.1"
 #  hardware_info: Undefined Hardware
 
-#esphome:
-#  name: "${name}"
-#  friendly_name: "${friendly_name}"
-#  comment: "${device_description}"
-#  project:
-#    name: "${project_name}"
-#    version: "${project_version}"
-#    name_add_mac_suffix: True
+esphome:
+  name: "${name}"
+  friendly_name: "${friendly_name}"
+  comment: "${device_description}"
+  project:
+    name: "${project_name}"
+    version: "${project_version}"
+    name_add_mac_suffix: True
 
 
 time:
