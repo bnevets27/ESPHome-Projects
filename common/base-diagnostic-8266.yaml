@@ -36,8 +36,6 @@ text_sensor:
     bssid:
       name: "AP MAC Address"
       icon: mdi:access-point
-    # scan_results:
-    #   name: Wifi Latest Scan Results
 
 sensor:
   - platform: uptime
@@ -62,10 +60,10 @@ button:
     entity_category: diagnostic
   - platform: factory_reset
     name: "Factory Reset - Wipe All"
-    disabled_by_default: True
+    disabled_by_default: true
     id: factory_reset_all
     icon: mdi:delete-forever
     entity_category: diagnostic
 
 debug:
-  #update_interval: 10min # default 60 seconds
+  # update_interval: 10min # default 60 seconds
