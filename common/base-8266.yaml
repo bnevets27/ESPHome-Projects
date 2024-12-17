@@ -1,4 +1,9 @@
 packages:
-  network: !include base-network.yaml
-  diagnostics: !include base-diagnostic-8266.yaml
-  generic: !include base-generic.yaml
+  remote_package:
+    url: https://github.com/bnevets27/ESPHome-Projects/
+    ref: main
+    files:
+      - common/base-generic.yaml
+      - common/base-diagnostic-8266.yaml
+      - common/base-network.yaml
+    refresh: 0d
