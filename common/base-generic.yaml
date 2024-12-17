@@ -5,7 +5,7 @@ esphome:
   project:
     name: "${project_name}"
     version: "${project_version}"
-  #name_add_mac_suffix: true
+  name_add_mac_suffix: true
 
 time:
   - platform: homeassistant
