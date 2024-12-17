@@ -10,7 +10,7 @@ substitutions:
 
 # This should point to the public location of this yaml file.
 dashboard_import:
-  package_import_url: github://bnevets27/ESPHome-Projects/globe-ir-remote.yaml@main
+  package_import_url: github://bnevets27/ESPHome-Projects/config/sonoff-s31-no_relay.yaml@main
   import_full_config: true
 
 esphome:
