@@ -1,22 +1,8 @@
-#substitutions:
-#  reset_button: GPIO0
-
 binary_sensor:
   - platform: status
     name: Online Status
     id: ink_ha_connected
     entity_category: "diagnostic"
-  - platform: gpio
-    pin:
-      number: "${reset_button}"
-      inverted: true
-    name: "Reset Button"
-    disabled_by_default: true
-    on_click:
-      min_length: 15s
-      max_length: 60s
-      then:
-        button.press: factory_reset_all
 
 text_sensor:
   - platform: template
