@@ -2,12 +2,12 @@ substitutions:
   name: "plug-s31"
   friendly_name: "Plug-S31"
   device_description: "Sonoff S31 Power Monitor"
-  hardware_info: "Sonoff S31 ESP8266 1M CSE7766"
+  hardware_info: "Disabled-Relay|ESP8266_1M|CSE7766"
 #### The Project information is required for adoption to work in the Dashboard. ####
   project_name: "SB-Inovations.Sonoff_S31"
   project_version: "0.0.1"
   ### Device Settings ###
-  restore_mode_relay: RESTORE_DEFAULT_ON
+  restore_mode_relay: ALWAYS_ON
 
 esp8266:
   board: esp01_1m
