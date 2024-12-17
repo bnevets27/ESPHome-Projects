@@ -1,7 +1,7 @@
 # This version has the relay ENABLED
 substitutions:
-  name: plug-s31
-  friendly_name: Plug-S31
+  name: "plug-s31"
+  friendly_name: "Plug-S31"
   device_description: "Sonoff S31 Power Monitor"
 
 dashboard_import:
@@ -13,8 +13,12 @@ dashboard_import:
 #  base: !include common/base-8266.yaml
 
 packages:
-  # shorthand form github://username/repository/[folder/]file-path.yml[@branch-or-tag]
-  remote_package_shorthand: github://bnevets27/ESPHome-Projects/common/base-generic.yaml@main
-  remote_package_shorthand: github://bnevets27/ESPHome-Projects/common/base-8266.yaml@main
-  remote_package_shorthand: github://bnevets27/ESPHome-Projects/common/base-diagnostic-8266.yaml@main
-  remote_package_shorthand: github://bnevets27/ESPHome-Projects/common/base-network.yaml@main
+  remote_package:
+    url: https://github.com/bnevets27/ESPHome-Projects/
+    ref: main
+    files:
+      - common/base-generic.yaml
+      - common/base-diagnostic-8266.yaml
+      - common/base-network.yaml
+      - common/devices/plugs/sonoff-s31.yaml
+    refresh: 0d
