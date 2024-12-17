@@ -28,6 +28,11 @@ binary_sensor:
     name: Button
     on_press:
       - switch.toggle: relay
+    on_click:
+      min_length: 15s
+      max_length: 60s
+      then:
+        button.press: factory_reset_all
 
 sensor:
   - platform: cse7766
