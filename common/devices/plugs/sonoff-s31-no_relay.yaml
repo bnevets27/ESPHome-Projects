@@ -1,0 +1,70 @@
+substitutions:
+  name: "plug-s31"
+  friendly_name: "Plug-S31"
+  device_description: "Sonoff S31 Power Monitor"
+  hardware_info: "Sonoff S31 ESP8266 1M CSE7766"
+#### The Project information is required for adoption to work in the Dashboard. ####
+  project_name: "SB-Inovations.Sonoff_S31"
+  project_version: "0.0.1"
+  ### Device Settings ###
+  restore_mode_relay: RESTORE_DEFAULT_ON
+
+esp8266:
+  board: esp01_1m
+  early_pin_init: false  # Prevent the physical relay flipping on reboot.
+  
+logger:
+  baud_rate: 0 # (UART logging disabled due to cse7766 power mon chip)
+
+uart:
+  rx_pin: RX
+  baud_rate: 4800
+  parity: EVEN
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO0
+      mode: INPUT_PULLUP
+      inverted: True
+    id: button
+    on_click:
+      min_length: 15s
+      max_length: 60s
+      then:
+        button.press: factory_reset_all
+
+sensor:
+  - platform: cse7766
+    #update_interval: 10s
+    current:
+      name: Amps
+      unit_of_measurement: A      
+      accuracy_decimals: 2
+    voltage:
+      name: Voltage
+      unit_of_measurement: V      
+      accuracy_decimals: 1
+    power:
+      name: Watts
+      accuracy_decimals: 0   
+      id: plug_power
+  - platform: total_daily_energy
+    name: Daily Energy
+    power_id: plug_power
+    filters:
+      - multiply: 0.001 ## convert Wh to kWh
+    unit_of_measurement: kWh
+
+switch:
+  - platform: gpio
+    name: "Relay"
+    internal: true #set to true to hide from HA - see https://esphome.io/components/switch/#config-switch
+    pin: GPIO12
+    id: relay
+    restore_mode: ${restore_mode_relay}
+    
+status_led:
+  pin:
+    number: GPIO13
+    inverted: True
