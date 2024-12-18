@@ -1,20 +1,11 @@
 esphome:
-  name: "${name}"
-  friendly_name: "${friendly_name}"
-  comment: "${device_description}"
-  project:
-    name: "${project_name}"
-    version: "${project_version}"
+  name: "plug-s31"
   name_add_mac_suffix: true
-
-time:
-  - platform: homeassistant
-    id: homeassistant_time
-
+  
 # This should point to the public location of this yaml file.
 dashboard_import:
   package_import_url: github://bnevets27/ESPHome-Projects/config/sonoff-s31-no_relay.yaml@main
-  import_full_config: true
+  import_full_config: false
 
 ## Note: Package order matters, they are loaded top down so, lowerest in the list overrites values of above packages
 packages:
