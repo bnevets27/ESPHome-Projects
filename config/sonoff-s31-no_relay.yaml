@@ -1,3 +1,16 @@
+esphome:
+  name: "${name}"
+  friendly_name: "${friendly_name}"
+  comment: "${device_description}"
+  project:
+    name: "${project_name}"
+    version: "${project_version}"
+  name_add_mac_suffix: true
+
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+
 # This should point to the public location of this yaml file.
 dashboard_import:
   package_import_url: github://bnevets27/ESPHome-Projects/config/sonoff-s31-no_relay.yaml@main
@@ -10,7 +23,7 @@ packages:
     ref: main
     files:
     #- common/base-8266.yaml
-    - common/base-generic.yaml
+    #- common/base-generic.yaml
     - common/base-diagnostic-8266.yaml
     - common/base-network.yaml
     - common/devices/plugs/sonoff-s31-no_relay.yaml
