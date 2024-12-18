@@ -4,7 +4,7 @@
 
 substitutions:
   name: "plug-s31"
-  friendly_name: "Plug-S31 - "
+  friendly_name: "Plug-S31 -"
   device_description: "Sonoff S31 Power Monitor"
   hardware_info: "ESP8266_1M|CSE7766"
   #### The Project information is required for adoption to work in the Dashboard. ####
