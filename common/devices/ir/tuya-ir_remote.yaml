@@ -4,7 +4,7 @@ substitutions:
   device_description: Universal WiFi IR Blaster Remote
   hardware_info: "TYWE3S"
 #### The Project information is required for adoption to work in the Dashboard. ####
-  project_name: "SB-Inovations.IR-Remote"
+  project_name: "Tuya-SBI.IR-Remote"
   project_version: "0.0.4"
   ### Device Settings ###
 
