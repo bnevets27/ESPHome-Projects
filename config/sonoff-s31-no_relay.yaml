@@ -1,5 +1,10 @@
 esphome:
-  name: "plug-s31"
+  name: plug-s31
+  friendly_name: Plug-S31
+  comment: Sonoff S31 Power Monitor
+  project:
+    name: SB-Inovations.Sonoff_S31
+    version: 0.0.1
   name_add_mac_suffix: true
   
 # This should point to the public location of this yaml file.
