@@ -1,10 +1,10 @@
 esphome:
   name: ir-remote
-  friendly_name: IR-Remote
-  comment: Universal WiFi IR Blaster Remote
+  friendly_name: "IR-Remote -"
+  comment: "Universal WiFi IR Blaster Remote"
   name_add_mac_suffix: true
   project:
-    name: "SB-Inovations.IR-Remote"
+    name: "Tuya-SBI.IR-Remote"
     version: "0.0.3"
   platform: ESP8266
   board: esp01_1m
