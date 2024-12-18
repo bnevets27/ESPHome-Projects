@@ -5,14 +5,14 @@ esphome:
   name_add_mac_suffix: true
   project:
     name: "Tuya-SBI.IR-Remote"
-    version: "0.0.3"
+    version: "0.0.1"
   platform: ESP8266
   board: esp01_1m
   
-  dashboard_import:
-    package_import_url: github://bnevets27/ESPHome-Projects/devices/oem/globe-ir-remote-minimal-share.yaml@main
-    import_full_config: true
-
+dashboard_import:
+  package_import_url: github://bnevets27/ESPHome-Projects/devices/oem/globe-ir-remote-minimal-share.yaml@main
+  import_full_config: true
+  
 # Enable Wi-Fi connection
 wifi:
   ap:
