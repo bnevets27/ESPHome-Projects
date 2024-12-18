@@ -108,7 +108,7 @@ sensor:
 
   - platform: total_daily_energy #(Optional, not specific to cse7766)
     name: "Daily Energy"
-    power_id: plug_power
+    power_id: my_power
     accuracy_decimals: 2
     filters:
       - multiply: 0.001 ## convert Wh to kWh
