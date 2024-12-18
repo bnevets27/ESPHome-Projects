@@ -5,7 +5,7 @@
 
 substitutions:
   name: "ir-remote"
-  friendly_name: "IR-Remote"
+  friendly_name: "IR-Remote - "
   device_description: "Universal WiFi IR Blaster Remote"
   hardware_info: "TYSW012|TYWE3S"
   #### The Project information is required for adoption to work in the Dashboard. ####
