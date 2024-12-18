@@ -13,7 +13,7 @@ esphome:
 # This should point to the public location of this yaml file.
 dashboard_import:
   package_import_url: github://bnevets27/ESPHome-Projects/config/sonoff-s31-no_relay.yaml@main
-  import_full_config: false
+  import_full_config: true
 
 ## Note: Package order matters, they are loaded top down so, lowerest in the list overrites values of above packages
 packages:
@@ -22,8 +22,5 @@ packages:
     ref: main
     files:
     - common/base-8266.yaml
-    #- common/base-generic.yaml
-    #- common/base-diagnostic-8266.yaml
-    #- common/base-network.yaml
     - common/devices/plugs/sonoff-s31-no_relay.yaml
     refresh: 0d
