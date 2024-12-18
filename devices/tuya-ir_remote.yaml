@@ -1,0 +1,112 @@
+# Device Info:
+# https://developer.tuya.com/en/docs/iot/tysw012-round-universal-remote-control?id=K9lnm617oupeb
+# https://devices.esphome.io/devices/Smartpoint-Wifi-Smart-Remote-Controller
+# This device is using a esp01_1m with 1mb of flash. To be able to update OTA the compiled firmware must not exceed 50% (500kb)
+
+substitutions:
+  name: "ir-remote"
+  friendly_name: "IR-Remote"
+  device_description: "Universal WiFi IR Blaster Remote"
+  hardware_info: "TYSW012|TYWE3S"
+  #### The Project information is required for adoption to work in the Dashboard. ####
+  project_name: "Tuya-SBI.IR-Remote"
+  project_version: "0.0.1"
+  
+# This should point to the public location of this yaml file.
+dashboard_import:
+  package_import_url: github://bnevets27/ESPHome-Projects/config/tuya-ir_remote.yaml@main
+  import_full_config: true
+
+## Note: Package order matters, they are loaded top down so, lowerest in the list overrites values of above packages
+packages:
+  remote_package:
+    url: https://github.com/bnevets27/ESPHome-Projects/
+    ref: main
+    files:
+      - common/base-diagnostic-8266.yaml
+      - common/base-network.yaml
+    refresh: 0d
+
+esphome:
+  name: "${name}"
+  friendly_name: "${friendly_name}"
+  comment: "${device_description}"
+  project:
+    name: "${project_name}"
+    version: "${project_version}"
+  name_add_mac_suffix: true
+
+### Device Sepcific ###
+  platform: ESP8266
+  board: esp01_1m
+
+# Enable logging without UART support as there would be no way to read it
+logger:
+  baud_rate: 0
+
+# Enable external blue LED as a status indictator
+status_led:
+  pin:
+    number: GPIO4
+
+# Enable the IR receiver to dump all IR commands to the log. Change dump type to your capture remote type. Use the captured IR command to replicate that IR command. You can disable this part when you aren't capturing IR command data.
+remote_receiver:
+  id: my_remote
+  pin:
+    number: GPIO5
+    inverted: true
+  dump: all
+
+# Enable the remote transmitter
+remote_transmitter:
+  pin: GPIO14
+  carrier_duty_percent: 50%
+
+# Enable the underside button.
+binary_sensor: 
+  - platform: gpio
+    pin:
+      number: GPIO13
+      inverted: true
+    name: "Underside Button"
+    id: underside_button
+    disabled_by_default: true
+    on_click:
+      min_length: 15s
+      max_length: 60s
+      then:
+        button.press: factory_reset_all
+
+switch:
+### Put Learned Codes Here ###
+######## Examples ########### 
+# Simple example template switch to control the power of a Samsung TV using IR commands
+  - platform: template
+    name: "TV Power"
+    optimistic: true
+    assumed_state: true
+    turn_on_action:
+      # Data would be the IR command captured in the log by the remote receiver
+      - remote_transmitter.transmit_samsung:
+          data: 0xE0E09966
+    turn_off_action:
+      # Data would be the IR command captured in the log by the remote receiver
+      - remote_transmitter.transmit_samsung:
+          data: 0xE0E019E6
+
+button:
+### Put Learned Codes Here ###
+######## Examples ########### 
+  - platform: template
+    name: Logitech Vol Up
+    on_press:
+      - remote_transmitter.transmit_nec:
+          address: 0xF708
+          command: 0xE51A
+
+  - platform: template
+    name: Logitech Vol Dw
+    on_press:
+      - remote_transmitter.transmit_nec:
+          address: 0xF708
+          command: 0xF10E
