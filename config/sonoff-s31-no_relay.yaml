@@ -1,22 +1,14 @@
 substitutions:
   hardware_info: "Disabled-Relay|ESP8266_1M|CSE7766"
   #hardware_info: "Removed-Relay|ESP8266_1M|CSE7766"
-  
+
+esphome:
   name: "plug-s31"
   friendly_name: "Plug-S31"
-  device_description: "Sonoff S31 Power Monitor"
-  #### The Project information is required for adoption to work in the Dashboard. ####
-  project_name: "SB-Inovations.Sonoff_S31"
-  project_version: "0.0.1"
-
-####################################
-esphome:
-  name: "${name}"
-  friendly_name: "${friendly_name}"
-  comment: "${device_description}"
+  comment: "Sonoff S31 Power Monitor"
   project:
-    name: "${project_name}"
-    version: "${project_version}"
+    name: "SB-Inovations.Sonoff_S31"
+    version: "0.0.1"
   
 # This should point to the public location of this yaml file.
 dashboard_import:
