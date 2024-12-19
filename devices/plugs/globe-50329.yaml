@@ -2,7 +2,7 @@
 # https://devices.esphome.io/devices/Globe-Electric-Wi-Fi-Smart-Plug-50329
 
 substitutions:
-  name: "plug-50329"
+  name: "globe-plug-50329"
   friendly_name: "Plug-50329 -"
   device_description: "Globe 50329 Smart Plug"
   hardware_info: "WB2S"
@@ -38,7 +38,6 @@ esphome:
 
 bk72xx:
   board: wb2s
-  early_pin_init: false  # Prevent the physical relay flipping on reboot
 
 # Enable logging
 logger:
@@ -70,7 +69,7 @@ binary_sensor:
       max_length: 60s
       then:
         button.press: factory_reset_all
-        
+
 switch:
   - platform: gpio
     name: "Outlet"
