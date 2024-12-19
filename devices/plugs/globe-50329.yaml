@@ -1,0 +1,85 @@
+# Device Info:
+# https://devices.esphome.io/devices/Globe-Electric-Wi-Fi-Smart-Plug-50329
+
+substitutions:
+  name: "plug-50329"
+  friendly_name: "Plug-50329 -"
+  device_description: "Globe 50329 Smart Plug"
+  hardware_info: "WB2S"
+  #### The Project information is required for adoption to work in the Dashboard. ####
+  project_name: "Globe-SBI.50329_Plug"
+  project_version: "0.0.1"
+  ### Device Settings ###
+  restore_mode_relay: RESTORE_DEFAULT_ON
+  
+# This should point to the public location of this yaml file.
+dashboard_import:
+  package_import_url: github://bnevets27/ESPHome-Projects/devices/plugs/globe-50329.yaml@main
+  import_full_config: true
+
+## Note: Package order matters, they are loaded top down so, lowerest in the list overrites values of above packages
+packages:
+  remote_package:
+    url: https://github.com/bnevets27/ESPHome-Projects/
+    ref: main
+    files:
+      - common/base-diagnostic-8266.yaml
+      - common/base-network.yaml
+    refresh: 0d
+
+esphome:
+  name: "${name}"
+  friendly_name: "${friendly_name}"
+  comment: "${device_description}"
+  project:
+    name: "${project_name}"
+    version: "${project_version}"
+  name_add_mac_suffix: true
+
+bk72xx:
+  board: wb2s
+  early_pin_init: false  # Prevent the physical relay flipping on reboot
+
+# Enable logging
+logger:
+
+light:
+  - platform: status_led
+    name: "led"
+    internal: true
+    id: led
+    pin:
+      number: P7
+      inverted: true
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: P26
+      inverted: true
+    name: "Button"
+    disabled_by_default: true
+    id: button1
+    filters:
+      - delayed_on: 10ms
+      - delayed_off: 10ms
+    on_press:
+      - switch.toggle: outlet
+    on_click:
+      min_length: 15s
+      max_length: 60s
+      then:
+        button.press: factory_reset_all
+        
+switch:
+  - platform: gpio
+    name: "Outlet"
+    device_class: outlet
+    id: outlet
+    pin: P24
+    icon: mdi:power-socket-us
+    on_turn_on:
+      - light.turn_on: led
+    on_turn_off:
+      - light.turn_off: led
+    restore_mode: ${restore_mode_relay}
