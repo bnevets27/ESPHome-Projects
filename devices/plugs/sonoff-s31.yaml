@@ -70,8 +70,6 @@ binary_sensor:
     name: "Button"
     on_press:
       - switch.toggle: relay
-  - platform: status
-    name: "Relay Status"
 
 sensor:
   - platform: cse7766
