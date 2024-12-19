@@ -116,7 +116,7 @@ sensor:
 
 switch:
   - platform: gpio
-    name: "Sonoff S31 Relay"
+    name: "Relay"
     pin: GPIO12
     id: relay
     restore_mode: ${restore_mode_relay}
