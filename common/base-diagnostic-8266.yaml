@@ -35,6 +35,9 @@ sensor:
     id: sys_uptime
     update_interval: 60s
     entity_category: "diagnostic"
+    unit_of_measurement: minutes
+    filters:
+      - lambda: return x / 60.0;
 
   - platform: wifi_signal
     name: Signal
