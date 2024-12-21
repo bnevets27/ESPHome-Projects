@@ -20,7 +20,7 @@ substitutions:
   
 # This should point to the public location of this yaml file.
 dashboard_import:
-  package_import_url: github://bnevets27/ESPHome-Projects/devices/relay/sonoff-basic-r3.yaml@main
+  package_import_url: github://bnevets27/ESPHome-Projects/devices/relay/sonoff-basic-rfr3.yaml@main
   import_full_config: true
 
 ## Note: Package order matters, they are loaded top down so, lowerest in the list overrites values of above packages
@@ -85,6 +85,12 @@ switch:
     pin: GPIO12
     id: relay
     restore_mode: ${restore_mode_relay}
+    on_turn_on:
+      if:
+        condition:
+          - light.is_off: blue_led
+        then:
+          - light.turn_on: blue_led
     on_turn_off:
       if:
         condition:
