@@ -1,1 +1,97 @@
+# Device Info:
+# https://devices.esphome.io/devices/Sonoff-Basic-DIY-light
+# The config for R2 v1.4 looks to work perfectly for the R3: https://devices.esphome.io/devices/Sonoff-BASIC-R2-v1.4
+# https://community.home-assistant.io/t/guide-how-to-flash-a-sonoff-basic-r3-ota-ewelink-esphome-and-setup-ha-in-docker/212472/7
 
+substitutions:
+  name: "sonoff-basic-r3"
+  friendly_name: "Sonoff-Basic R3 -"
+  device_description: "Sonoff-Basic R3 Relay"
+  hardware_info: "ESP8285"
+  #### The Project information is required for adoption to work in the Dashboard. ####
+  project_name: "Sonoff-SBI.Basis_R3_Relay"
+  project_version: "0.0.1"
+  ### Device Settings ###
+  restore_mode_relay: RESTORE_DEFAULT_ON
+  
+# This should point to the public location of this yaml file.
+dashboard_import:
+  package_import_url: github://bnevets27/ESPHome-Projects/devices/relay/sonoff-basic-r3.yaml@main
+  import_full_config: true
+
+## Note: Package order matters, they are loaded top down so, lowerest in the list overrites values of above packages
+packages:
+  remote_package:
+    url: https://github.com/bnevets27/ESPHome-Projects/
+    ref: main
+    files:
+      - common/base-diagnostic-8266.yaml
+      - common/base-network.yaml
+    refresh: 0d
+
+esphome:
+  name: "${name}"
+  friendly_name: "${friendly_name}"
+  comment: "${device_description}"
+  project:
+    name: "${project_name}"
+    version: "${project_version}"
+  name_add_mac_suffix: true
+
+esp8266:
+  board: esp8285
+  early_pin_init: false  # Prevent the physical relay flipping on reboot.
+
+logger:
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO0
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    name: "Button"
+    disabled_by_default: true
+    id: button1
+    filters:
+      - delayed_on: 10ms
+      - delayed_off: 10ms
+    on_press:
+      # Prevents unintended LED lit states.
+      if:
+        condition:
+          - switch.is_off: relay
+        then:
+          - light.turn_on: blue_led
+          - switch.turn_on: relay
+        else:
+          - switch.turn_off: relay
+    on_click:
+      min_length: 15s
+      max_length: 60s
+      then:
+        button.press: factory_reset_all
+
+switch:
+  # The relay switches on the red side of the LED when active.
+  - platform: gpio
+    name: "Relay"
+    pin: GPIO12
+    id: relay
+    restore_mode: ${restore_mode_relay}
+    on_turn_off:
+      if:
+        condition:
+          - light.is_on: blue_led
+        then:
+          - light.turn_off: blue_led
+
+light:
+  - platform: status_led
+    id: blue_led
+    internal: True
+    pin:
+      number: GPIO13
+      inverted: True
