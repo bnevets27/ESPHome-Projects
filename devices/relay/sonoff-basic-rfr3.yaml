@@ -20,7 +20,7 @@ substitutions:
   
 # This should point to the public location of this yaml file.
 dashboard_import:
-  package_import_url: github://bnevets27/ESPHome-Projects/devices/relay/sonoff-basic-rfr3.yaml@main
+  package_import_url: github://bnevets27/ESPHome-Projects/devices/relay/sonoff-basic-r3.yaml@main
   import_full_config: true
 
 ## Note: Package order matters, they are loaded top down so, lowerest in the list overrites values of above packages
@@ -63,7 +63,15 @@ binary_sensor:
       - delayed_on: 10ms
       - delayed_off: 10ms
     on_press:
-      - switch.toggle: relay
+      # Prevents unintended LED lit states.
+      if:
+        condition:
+          - switch.is_off: relay
+        then:
+          - light.turn_on: blue_led
+          - switch.turn_on: relay
+        else:
+          - switch.turn_off: relay
     on_click:
       min_length: 15s
       max_length: 60s
@@ -71,13 +79,23 @@ binary_sensor:
         button.press: factory_reset_all
 
 switch:
+  # The relay switches on the red side of the LED when active.
   - platform: gpio
     name: "Relay"
     pin: GPIO12
     id: relay
     restore_mode: ${restore_mode_relay}
+    on_turn_off:
+      if:
+        condition:
+          - light.is_on: blue_led
+        then:
+          - light.turn_off: blue_led
 
-status_led:
-  pin:
-    number: GPIO13
-    inverted: true
+light:
+  - platform: status_led
+    id: blue_led
+    internal: True
+    pin:
+      number: GPIO13
+      inverted: True
