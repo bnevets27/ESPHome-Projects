@@ -9,6 +9,12 @@ binary_sensor:
 
 text_sensor:
   - platform: template
+    name: "Last Restart Time"
+    id: last_restart_time
+    icon: mdi:clock
+    entity_category: diagnostic
+    device_class: timestamp
+  - platform: template
     name: "Hardware Info"
     entity_category: diagnostic
     update_interval: 24h
@@ -29,16 +35,8 @@ text_sensor:
       name: "AP MAC Address"
       icon: mdi:access-point
 
-sensor:
-  - platform: uptime
-    name: Uptime
-    id: sys_uptime
-    update_interval: 60s
-    entity_category: "diagnostic"
-    unit_of_measurement: minutes
-    filters:
-      - lambda: return x / 60.0;
 
+sensor:
   - platform: wifi_signal
     name: Signal
     id: wifi_signal_db
@@ -59,3 +57,17 @@ button:
     id: factory_reset_all
     icon: mdi:delete-forever
     entity_category: diagnostic
+
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+    on_time_sync:
+      then:
+        # Update last restart time, but only once.
+        - if:
+            condition:
+              lambda: 'return id(last_restart_time).state == "";'
+            then:
+              - text_sensor.template.publish:
+                  id: last_restart_time
+                  state: !lambda 'return id(homeassistant_time).utcnow().strftime("%Y-%m-%dT%H:%M:%S.000000+00:00");'
