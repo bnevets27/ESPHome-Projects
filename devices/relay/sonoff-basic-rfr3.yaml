@@ -13,7 +13,7 @@ substitutions:
   device_description: "Sonoff-Basic RFR3 Relay"
   hardware_info: "ESP8285"
   #### The Project information is required for adoption to work in the Dashboard. ####
-  project_name: "Sonoff-SBI.Basis_RFR3_Relay"
+  project_name: "Sonoff-SBI.Basic_RFR3_Relay"
   project_version: "0.0.1"
   ### Device Settings ###
   restore_mode_relay: RESTORE_DEFAULT_ON
