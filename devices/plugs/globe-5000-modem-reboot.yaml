@@ -2,19 +2,20 @@
 # https://devices.esphome.io/devices/Globe-Electric-Wi-Fi-Smart-Plug-50329
 
 substitutions:
-  name: "globe-plug-50329"
-  friendly_name: "Plug-50329-Auto-Reboot -"
-  device_description: "Globe 50329 Smart Plug - Auto Reboot on Internet Ping Failure"
-  hardware_info: "WB2S"
+  name: "globe-plug-50000"
+  friendly_name: "Plug-50000-Auto-Reboot -"
+  device_description: "Globe 50000 Smart Plug - Auto Reboot on Internet Ping Failure"
+  hardware_info: "ESP8265"
+  device_info: "Auto Reboot on Failed Ping to WAN"
   #### The Project information is required for adoption to work in the Dashboard. ####
-  project_name: "Globe-SBI.50329_Plug_Auto_Reboot"
+  project_name: "Globe-SBI.50000_Plug_Auto_Reboot"
   project_version: "0.0.1"
   ### Device Settings ###
   restore_mode_relay: RESTORE_DEFAULT_ON
   
 # This should point to the public location of this yaml file.
 dashboard_import:
-  package_import_url: github://bnevets27/ESPHome-Projects/devices/plugs/globe-50329-modem-reboot.yaml@main
+  package_import_url: github://bnevets27/ESPHome-Projects/devices/plugs/globe-5000-modem-reboot.yaml@main
   import_full_config: true
 
 ## Note: Package order matters, they are loaded top down so, lowerest in the list overrites values of above packages
@@ -35,14 +36,15 @@ esphome:
     name: "${project_name}"
     version: "${project_version}"
   name_add_mac_suffix: true
-
-bk72xx:
-  board: wb2s
-
 # Libraries and external_components add for the ping script
-libraries:
-  - ESP8266WiFi
-  - https://github.com/akaJes/AsyncPing#95ac7e4
+  platformio_options:
+    lib_deps:
+      - ESP8266WiFi
+      - https://github.com/akaJes/AsyncPing#95ac7e4
+
+esp8266:
+  board: esp12e
+  early_pin_init: false  # Prevent the physical relay flipping on reboot.
 
 external_components:
   - source:
@@ -55,17 +57,17 @@ logger:
 
 light:
   - platform: status_led
-    name: "led"
+    name: "LED"
     internal: true
     id: led
     pin:
-      number: P7
+      number: GPIO04
       inverted: true
 
 binary_sensor:
   - platform: gpio
     pin:
-      number: P26
+      number: GPIO14
       inverted: true
     name: "Button"
     disabled_by_default: true
@@ -86,7 +88,7 @@ switch:
     name: "Outlet"
     device_class: outlet
     id: outlet
-    pin: P24
+    pin: GPIO12
     icon: mdi:power-socket-us
     on_turn_on:
       - light.turn_on: led
