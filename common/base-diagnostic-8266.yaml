@@ -1,13 +1,14 @@
 debug:
   # update_interval: 10min # default 60 seconds
-
+logger:
+  id: logger_id
+  level: DEBUG
+  initial_level: VERY_VERBOSE
+  
 select:
   - platform: logger
     id: logger_select
-    name: Logger Level
-    logs:
-      sensor: VERBOSE
-      sensor: VERY_VERBOSE
+    name: "Logger Level"E
       
 binary_sensor:
   - platform: status
