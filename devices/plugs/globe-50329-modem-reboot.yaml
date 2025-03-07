@@ -14,7 +14,7 @@ substitutions:
   
 # This should point to the public location of this yaml file.
 dashboard_import:
-  package_import_url: github://bnevets27/ESPHome-Projects/devices/plugs/globe-50329.yaml@main
+  package_import_url: github://bnevets27/ESPHome-Projects/devices/plugs/globe-50329-modem-reboot.yaml@main
   import_full_config: true
 
 ## Note: Package order matters, they are loaded top down so, lowerest in the list overrites values of above packages
