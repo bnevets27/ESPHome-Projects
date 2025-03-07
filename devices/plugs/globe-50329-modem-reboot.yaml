@@ -3,11 +3,11 @@
 
 substitutions:
   name: "globe-plug-50329"
-  friendly_name: "Plug-50329 -"
-  device_description: "Globe 50329 Smart Plug"
+  friendly_name: "Plug-50329-Auto-Reboot -"
+  device_description: "Globe 50329 Smart Plug - Auto Reboot on Internet Ping Failure"
   hardware_info: "WB2S"
   #### The Project information is required for adoption to work in the Dashboard. ####
-  project_name: "Globe-SBI.50329_Plug"
+  project_name: "Globe-SBI.50329_Plug_Auto_Reboot"
   project_version: "0.0.1"
   ### Device Settings ###
   restore_mode_relay: RESTORE_DEFAULT_ON
@@ -39,20 +39,10 @@ esphome:
 bk72xx:
   board: wb2s
 
-text_sensor:
-  - platform: libretiny
-    version:
-      name: LibreTiny Version
-      entity_category: diagnostic
-  - platform: template
-    name: "Device Info"
-    entity_category: diagnostic
-    lambda: return {"Auto Reboot on Failed Ping to WAN"};
-
 # Libraries and external_components add for the ping script
-  libraries:
-    - ESP8266WiFi
-    - https://github.com/akaJes/AsyncPing#95ac7e4
+libraries:
+  - ESP8266WiFi
+  - https://github.com/akaJes/AsyncPing#95ac7e4
 
 external_components:
   - source:
