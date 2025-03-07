@@ -6,8 +6,8 @@ select:
     id: logger_select
     name: Logger Level
     logs:
-      button: VERBOSE
-      button: VERY_VERBOSE
+      sensor: VERBOSE
+      sensor: VERY_VERBOSE
       
 binary_sensor:
   - platform: status
