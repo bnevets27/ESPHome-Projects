@@ -8,7 +8,7 @@ logger:
 select:
   - platform: logger
     id: logger_select
-    name: "Logger Level"E
+    name: "Logger Level"
       
 binary_sensor:
   - platform: status
