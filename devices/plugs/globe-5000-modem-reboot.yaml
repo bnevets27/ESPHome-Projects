@@ -7,6 +7,7 @@ substitutions:
   device_description: "Globe 50000 Smart Plug - Auto Reboot on Internet Ping Failure"
   hardware_info: "ESP8265"
   device_info: "Auto Reboot on Failed Ping to WAN"
+  ping_ip: "8.8.8.8"
   #### The Project information is required for adoption to work in the Dashboard. ####
   project_name: "Globe-SBI.50000_Plug_Auto_Reboot"
   project_version: "0.0.1"
@@ -52,9 +53,6 @@ external_components:
       url: https://github.com/trombik/esphome-component-ping
       ref: main
 
-# Enable logging
-logger:
-
 light:
   - platform: status_led
     name: "LED"
@@ -97,6 +95,20 @@ switch:
     restore_mode: ${restore_mode_relay}
 
 # The following is cut and pasted for the most part from: https://graha.ms/posts/blog/2023-05-08-esphome-autorestart/
+sensor:
+  - platform: ping
+    ip_address: "${ping_ip}"
+    id: ping_response
+    num_attempts: 1
+    timeout: 1sec
+    loss:
+      name: "Packet Loss to Internet"
+      id: loss
+    latency:
+      name: "Latency to Internet"
+      accuracy_decimals: 3
+    update_interval: 30s
+
 globals:
   - id: last_power_cycle
     type: time_t
