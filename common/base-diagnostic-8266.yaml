@@ -5,7 +5,15 @@ select:
   - platform: logger
     id: logger_select
     name: Logger Level
-  
+    log_levels:
+      - NONE
+      - ERROR
+      - WARN
+      - INFO
+      - DEBUG
+      - VERBOSE
+      - VERY_VERBOSE
+      
 binary_sensor:
   - platform: status
     name: Online Status
