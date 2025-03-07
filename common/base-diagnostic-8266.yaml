@@ -1,12 +1,5 @@
 debug:
   # update_interval: 10min # default 60 seconds
-  
-logger:
-  id: logger_id
-  level: verbose
-  initial_level: debug
-  logs:
-    button: verbose
 
 select:
   - platform: logger
@@ -68,10 +61,6 @@ button:
     id: factory_reset_all
     icon: mdi:delete-forever
     entity_category: diagnostic
-  - platform: template
-    name: Verbose
-    on_press:
-      logger.set_level: verbose
 
 time:
   - platform: homeassistant
