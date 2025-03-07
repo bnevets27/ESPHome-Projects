@@ -1,0 +1,163 @@
+# Device Info:
+# https://devices.esphome.io/devices/Globe-Electric-Wi-Fi-Smart-Plug-50329
+
+substitutions:
+  name: "globe-plug-50329"
+  friendly_name: "Plug-50329 -"
+  device_description: "Globe 50329 Smart Plug"
+  hardware_info: "WB2S"
+  #### The Project information is required for adoption to work in the Dashboard. ####
+  project_name: "Globe-SBI.50329_Plug"
+  project_version: "0.0.1"
+  ### Device Settings ###
+  restore_mode_relay: RESTORE_DEFAULT_ON
+  
+# This should point to the public location of this yaml file.
+dashboard_import:
+  package_import_url: github://bnevets27/ESPHome-Projects/devices/plugs/globe-50329.yaml@main
+  import_full_config: true
+
+## Note: Package order matters, they are loaded top down so, lowerest in the list overrites values of above packages
+packages:
+  remote_package:
+    url: https://github.com/bnevets27/ESPHome-Projects/
+    ref: main
+    files:
+      - common/base-diagnostic-8266.yaml
+      - common/base-network.yaml
+    refresh: 0d
+
+esphome:
+  name: "${name}"
+  friendly_name: "${friendly_name}"
+  comment: "${device_description}"
+  project:
+    name: "${project_name}"
+    version: "${project_version}"
+  name_add_mac_suffix: true
+
+bk72xx:
+  board: wb2s
+
+# Libraries and external_components add for the ping script
+  libraries:
+    - ESP8266WiFi
+    - https://github.com/akaJes/AsyncPing#95ac7e4
+
+external_components:
+  - source:
+      type: git
+      url: https://github.com/trombik/esphome-component-ping
+      ref: main
+
+# Enable logging
+logger:
+
+light:
+  - platform: status_led
+    name: "led"
+    internal: true
+    id: led
+    pin:
+      number: P7
+      inverted: true
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: P26
+      inverted: true
+    name: "Button"
+    disabled_by_default: true
+    id: button1
+    filters:
+      - delayed_on: 10ms
+      - delayed_off: 10ms
+    on_press:
+      - switch.toggle: outlet
+    on_click:
+      min_length: 15s
+      max_length: 60s
+      then:
+        button.press: factory_reset_all
+
+switch:
+  - platform: gpio
+    name: "Outlet"
+    device_class: outlet
+    id: outlet
+    pin: P24
+    icon: mdi:power-socket-us
+    on_turn_on:
+      - light.turn_on: led
+    on_turn_off:
+      - light.turn_off: led
+    restore_mode: ${restore_mode_relay}
+
+# The following is cut and pasted for the most part from: https://graha.ms/posts/blog/2023-05-08-esphome-autorestart/
+globals:
+  - id: last_power_cycle
+    type: time_t
+    restore_value: no
+    initial_value: '0'
+  - id: packet_loss_count
+    type: int
+    restore_value: no
+    initial_value: '0'
+
+# Ping time (in seconds)
+interval:
+  - interval: 60s
+    then:
+      - script.execute: ping_check
+
+# Script for checking packet loss
+script:
+  - id: ping_check
+    then:
+      - if:
+          condition:
+            # Condition checks if packet loss has occurred
+            lambda: 'return id(loss).state > 0;'
+          then:
+            # If packet loss has occurred, increment packet_loss_count
+            - lambda: |- 
+                id(packet_loss_count) += 1;
+                // If there are 3 consecutive packet losses, reset the count and execute power_cycle_relay script
+                if (id(packet_loss_count) >= 3) {
+                  id(packet_loss_count) = 0;
+                  id(power_cycle_relay).execute();
+                }
+          else:
+            # If there's no packet loss, reset the packet_loss_count
+            - lambda: |- 
+                id(packet_loss_count) = 0;
+
+  # Script for power cycling the relay
+  - id: power_cycle_relay
+    then:
+      - lambda: |-
+          time_t now = id(esphome_time).now().timestamp;
+          // Do not power cycle during the first 15 minutes after boot
+          if (now < 900) {
+            ESP_LOGD("power_cycle_relay", "Skipping power cycle during the first 15 minutes after boot");
+            return;
+          }
+          // Do not power cycle if the last power cycle was less than 15 minutes ago
+          if ((now - id(last_power_cycle)) < 900) {
+            ESP_LOGD("power_cycle_relay", "Skipping power cycle since it's been less than 15 minutes since the last one");
+            return;
+          }
+          // Update the last power cycle timestamp and execute the power cycle
+          id(last_power_cycle) = now;
+          ESP_LOGD("power_cycle_relay", "Power cycling the relay due to button press or packet loss.");
+          id(outlet).turn_off();          
+      - delay: 5s
+      - lambda: |- 
+          id(outlet).turn_on();
+
+time:
+  - platform: sntp
+    id: esphome_time
+    servers:
+      - 0.pool.ntp.org
