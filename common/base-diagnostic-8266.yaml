@@ -1,3 +1,5 @@
+## Stop using this as base-diagnostic.yaml is now compatible with 8266
+
 debug:
   # update_interval: 10min # default 60 seconds
 logger:
