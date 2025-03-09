@@ -1,0 +1,85 @@
+## Compatible with ESP8266, ESP32 and BK72xx
+debug:
+  # update_interval: 10min # default 60 seconds
+logger:
+  id: logger_id
+  level: DEBUG
+  initial_level: VERY_VERBOSE
+  
+select:
+  - platform: logger
+    id: logger_select
+    name: "Logger Level"
+      
+binary_sensor:
+  - platform: status
+    name: Online Status
+    id: ink_ha_connected
+    entity_category: "diagnostic"
+
+text_sensor:
+  - platform: template
+    name: "Last Restart Time"
+    id: last_restart_time
+    icon: mdi:clock
+    entity_category: diagnostic
+    device_class: timestamp
+  - platform: template
+    name: "Hardware Info"
+    entity_category: diagnostic
+    lambda: return {"$hardware_info"};
+  - platform: template
+    name: "Device Info"
+    entity_category: diagnostic
+    lambda: return {"$device_info"};
+  - platform: version
+    name: "ESPHome Version"
+  - platform: wifi_info
+    ip_address:
+      name: "ESP IP Adress"
+      icon: mdi:ip-network-outline
+    mac_address:
+      name: "ESP MAC Adress"
+      icon: mdi:network-outline
+    ssid:
+      name: "AP SSID"
+      icon: mdi:access-point
+    bssid:
+      name: "AP MAC Address"
+      icon: mdi:access-point
+
+sensor:
+  - platform: wifi_signal
+    name: Signal
+    id: wifi_signal_db
+    update_interval: 60s
+    entity_category: "diagnostic"
+
+button:
+  - platform: restart
+    name: "Reboot"
+    icon: mdi:power-cycle
+    entity_category: diagnostic
+  - platform: safe_mode
+    name: "Safe Mode"
+    entity_category: diagnostic
+  - platform: factory_reset
+    name: "Factory Reset - Wipe All"
+    disabled_by_default: true
+    id: factory_reset_all
+    icon: mdi:delete-forever
+    entity_category: diagnostic
+
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+    on_time_sync:
+      then:
+        # Update last restart time, but only once.
+        - if:
+            condition:
+              lambda: 'return id(last_restart_time).state == "";'
+            then:
+              - text_sensor.template.publish:
+                  id: last_restart_time
+                  state: !lambda 'return id(homeassistant_time).utcnow().strftime("%Y-%m-%dT%H:%M:%S.000000+00:00");'
