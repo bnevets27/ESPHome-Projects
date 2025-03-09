@@ -92,10 +92,10 @@ binary_sensor:
         auto r = ${init}
         return {r->vacuumSensor, r->virtualWallSensor, r->chargingSourcesSensor};
     binary_sensors:
-      - name: "${name} vacuum state"
+      - name: "Vacuum state"
         id: "${id}_vacuum"
-      - name: "${name} virtual wall"
-      - name: "${name} charging source available"
+      - name: "Virtual Wall"
+      - name: "Charging Source Available"
 
 sensor:
   - platform: custom
@@ -103,48 +103,48 @@ sensor:
         auto r = ${init}
         return {r->voltageSensor, r->currentSensor, r->batteryChargeSensor, r->batteryCapacitySensor, r->batteryPercentSensor, r->batteryTemperatureSensor, r->driveSpeedSensor, r->rightMotorCurrentSensor, r->leftMotorCurrentSensor, r->mainBrushCurrentSensor, r->sideBrushCurrentSensor};
     sensors:
-      - name: "${name} voltage"
+      - name: "Voltage"
         unit_of_measurement: "V"
         icon: mdi:sine-wave
         accuracy_decimals: 2
-      - name: "${name} current"
+      - name: "Current"
         unit_of_measurement: "A"
         icon: mdi:lightning-bolt
         accuracy_decimals: 3
-      - name: "${name} charge"
+      - name: "Charge"
         unit_of_measurement: "Ah"
         icon: mdi:battery-charging
         accuracy_decimals: 2
-      - name: "${name} capacity"
+      - name: "Capacity"
         unit_of_measurement: "Ah"
         icon: mdi:battery
         accuracy_decimals: 2
-      - name: "${name} battery"
+      - name: "Battery"
         unit_of_measurement: "%"
         state_class: "measurement"
         device_class: battery
         icon: mdi:battery-outline
         accuracy_decimals: 0
-      - name: "${name} temperature"
+      - name: "Temperature"
         unit_of_measurement: "°C"
         icon: mdi:thermometer
         accuracy_decimals: 0
-      - name: "${name} drive speed"
+      - name: "Drive Speed"
         unit_of_measurement: "mm/s"
         accuracy_decimals: 0
-      - name: "${name} right motor current"
+      - name: "Right Motor Current"
         unit_of_measurement: "A"
         icon: mdi:lightning-bolt
         accuracy_decimals: 2
-      - name: "${name} left motor current"
+      - name: "Left Motor Current"
         unit_of_measurement: "A"
         icon: mdi:lightning-bolt
         accuracy_decimals: 2
-      - name: "${name} main brush current"
+      - name: "Main Brush Current"
         unit_of_measurement: "A"
         icon: mdi:lightning-bolt
         accuracy_decimals: 2
-      - name: "${name} side brush current"
+      - name: "Side Brush Current"
         unit_of_measurement: "A"
         icon: mdi:lightning-bolt
         accuracy_decimals: 2
@@ -155,11 +155,11 @@ text_sensor:
       auto r = ${init}
       return {r->chargingSensor, r->activitySensor, r->oiModeSensor, r->buttonsSensor};
     text_sensors:
-      - name: "${name} charging state"
-      - name: "${name} activity"
-      - name: "${name} OI mode"
+      - name: "Charging State"
+      - name: "Activity"
+      - name: "OI Mode"
         id: "${id}_oi_mode"
-      - name: "${name} pressed button"
+      - name: "Pressed Button"
 
 button:
   - platform: template
@@ -340,7 +340,7 @@ button:
 
 switch:
   - platform: template
-    name: "${friendly_name} Vacuum"
+    name: "Vacuum"
     lambda: |-
       return id(${id}_vacuum).state;
     turn_on_action:
@@ -351,7 +351,7 @@ switch:
             static_cast< RoombaComponent*> (id(my_roomba).get_component(0))->send_command("vacuum_off");
   
   - platform: template
-    name: "${friendly_name} Safe Mode"
+    name: "Safe Mode"
     lambda: |-
       if (id(${id}_oi_mode).state == "safe") {
         return true;
