@@ -62,6 +62,12 @@ status_led:
     number: GPIO8
     inverted: true
 
+esp32_ble_beacon:
+  type: iBeacon
+  tx_power: 9
+  measured_power: -74
+  uuid: f228a856-cc91-6ae6-5829-fb677292c386
+
 uart:
   id: uart_bus
   tx_pin: 6
