@@ -2,13 +2,13 @@
 # https://github.com/ShonP40/ESPRoomba
 
 substitutions:
-  name: "roomba-565-1"
-  friendly_name: "Roomba 565"
+  name: "roomba"
+  friendly_name: "Roomba - "
   id: "irobot"
-  device_description: "Roomba 565_______"
+  device_description: "iRobot Roomba 600/700/800"
   hardware_info: "ESP32C3.Super-Mini"
   #### The Project information is required for adoption to work in the Dashboard. ####
-  project_name: "ESP32C3.Super-Mini"
+  project_name: "DIY-SBI.Roomba"
   project_version: "1.0"
   # BRC pin, uart_bus, polling interval in milliseconds, wake up 650+ series
   init: 'RoombaComponent::instance(10, id(uart_bus), 10000, true);'
