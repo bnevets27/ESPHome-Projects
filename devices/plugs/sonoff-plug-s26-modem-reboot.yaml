@@ -3,7 +3,7 @@
 # Auto reboot copied from: https://graha.ms/posts/blog/2023-05-08-esphome-autorestart/
 
 substitutions:
-  name: "sonoff-plug-s26-modem-reboot"
+  name: "sonoff-plug-s26-reboot"
   friendly_name: "Sonoff-Plug-S26-Auto-Reboot -"
   device_description: "Sonoff-S26 Plug - Auto Reboot on Internet Ping Failure"
   device_info: "Auto Reboot on Failed Ping to WAN"
@@ -28,6 +28,12 @@ packages:
       - common/base-diagnostic-8266.yaml
       - common/base-network.yaml
     refresh: 0d
+
+external_components:
+  - source:
+      type: git
+      url: https://github.com/trombik/esphome-component-ping
+      ref: main
 
 esphome:
   name: "${name}"
@@ -71,9 +77,9 @@ binary_sensor:
 
 switch:
   - platform: gpio
-    name: "Outlet"
+    name: "Relay"
     pin: GPIO12
-    id: outlet
+    id: relay
     restore_mode: ${restore_mode_relay}
 
 status_led:
@@ -152,10 +158,10 @@ script:
           // Update the last power cycle timestamp and execute the power cycle
           id(last_power_cycle) = now;
           ESP_LOGD("power_cycle_relay", "Power cycling the relay due to button press or packet loss.");
-          id(outlet).turn_off();          
+          id(relay).turn_off();          
       - delay: 5s
       - lambda: |- 
-          id(outlet).turn_on();
+          id(relay).turn_on();
 
 time:
   - platform: sntp
