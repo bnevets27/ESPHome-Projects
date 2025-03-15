@@ -29,15 +29,12 @@ text_sensor:
     name: "Hardware Info"
     entity_category: diagnostic
     lambda: return {"$hardware_info"};
-    update_interval: never
   - platform: template
     name: "Device Info"
     entity_category: diagnostic
     lambda: return {"$device_info"};
-    update_interval: never
   - platform: version
     name: "ESPHome Version"
-    update_interval: never
   - platform: wifi_info
     ip_address:
       name: "ESP IP Adress"
