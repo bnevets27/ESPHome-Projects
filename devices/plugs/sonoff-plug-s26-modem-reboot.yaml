@@ -1,5 +1,6 @@
 # Device Info:
 # https://devices.esphome.io/devices/Sonoff-Basic-DIY-light
+# Auto reboot copied from: https://graha.ms/posts/blog/2023-05-08-esphome-autorestart/
 
 substitutions:
   name: "sonoff-plug-s26-modem-reboot"
