@@ -3,8 +3,8 @@ debug:
   # update_interval: 10min # default 60 seconds
 logger:
   id: logger_id
-  level: DEBUG
-  initial_level: VERY_VERBOSE
+  level: VERY_VERBOSE
+  initial_level: DEBUG
   
 select:
   - platform: logger
