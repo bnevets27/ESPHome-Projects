@@ -1,5 +1,6 @@
 # Device Info:
-# https://devices.esphome.io/devices/Globe-Electric-Wi-Fi-Smart-Plug-50329
+# Auto reboot copied from: https://graha.ms/posts/blog/2023-05-08-esphome-autorestart/
+# To flash over OTA, you must gzip the bin file. If you don't it will be too big to flash (over 500kb).
 
 substitutions:
   name: "globe-plug-50000"
@@ -13,6 +14,7 @@ substitutions:
   project_version: "0.0.1"
   ### Device Settings ###
   restore_mode_relay: RESTORE_DEFAULT_ON
+  ping_ip: "8.8.8.8"
   
 # This should point to the public location of this yaml file.
 dashboard_import:
@@ -25,9 +27,15 @@ packages:
     url: https://github.com/bnevets27/ESPHome-Projects/
     ref: main
     files:
-      - common/base-diagnostic-8266.yaml
+      - common/base-diagnostic.yaml
       - common/base-network.yaml
     refresh: 0d
+
+external_components:
+  - source:
+      type: git
+      url: https://github.com/trombik/esphome-component-ping
+      ref: main
 
 esphome:
   name: "${name}"
@@ -37,35 +45,22 @@ esphome:
     name: "${project_name}"
     version: "${project_version}"
   name_add_mac_suffix: true
-# Libraries and external_components add for the ping script
-  platformio_options:
-    lib_deps:
-      - ESP8266WiFi
-      - https://github.com/akaJes/AsyncPing#95ac7e4
+  ## Support library for Ping
+  libraries:
+    - ESP8266WiFi
+    - https://github.com/akaJes/AsyncPing#95ac7e4
 
 esp8266:
   board: esp01_1m
   early_pin_init: false  # Prevent the physical relay flipping on reboot.
 
-external_components:
-  - source:
-      type: git
-      url: https://github.com/trombik/esphome-component-ping
-      ref: main
-
-light:
-  - platform: status_led
-    name: "LED"
-    internal: true
-    id: led
-    pin:
-      number: GPIO04
-      inverted: true
-
 binary_sensor:
   - platform: gpio
     pin:
       number: GPIO14
+      mode:
+        input: true
+        pullup: true
       inverted: true
     name: "Button"
     disabled_by_default: true
@@ -74,7 +69,7 @@ binary_sensor:
       - delayed_on: 10ms
       - delayed_off: 10ms
     on_press:
-      - switch.toggle: outlet
+      - switch.toggle: relay
     on_click:
       min_length: 15s
       max_length: 60s
@@ -83,16 +78,15 @@ binary_sensor:
 
 switch:
   - platform: gpio
-    name: "Outlet"
-    device_class: outlet
-    id: outlet
+    name: "Relay"
     pin: GPIO12
-    icon: mdi:power-socket-us
-    on_turn_on:
-      - light.turn_on: led
-    on_turn_off:
-      - light.turn_off: led
+    id: relay
     restore_mode: ${restore_mode_relay}
+
+status_led:
+  pin:
+    number: GPIO04
+    inverted: yes
 
 # The following is cut and pasted for the most part from: https://graha.ms/posts/blog/2023-05-08-esphome-autorestart/
 sensor:
@@ -165,10 +159,10 @@ script:
           // Update the last power cycle timestamp and execute the power cycle
           id(last_power_cycle) = now;
           ESP_LOGD("power_cycle_relay", "Power cycling the relay due to button press or packet loss.");
-          id(outlet).turn_off();          
+          id(relay).turn_off();          
       - delay: 5s
       - lambda: |- 
-          id(outlet).turn_on();
+          id(relay).turn_on();
 
 time:
   - platform: sntp
