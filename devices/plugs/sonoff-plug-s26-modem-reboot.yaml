@@ -1,0 +1,163 @@
+# Device Info:
+# https://devices.esphome.io/devices/Sonoff-Basic-DIY-light
+
+substitutions:
+  name: "sonoff-plug-s26-modem-reboot"
+  friendly_name: "Sonoff-Plug-S26-Auto-Reboot -"
+  device_description: "Sonoff-S26 Plug - Auto Reboot on Internet Ping Failure"
+  device_info: "Auto Reboot on Failed Ping to WAN"
+  hardware_info: "ESP8285"
+  #### The Project information is required for adoption to work in the Dashboard. ####
+  project_name: "Sonoff-SBI.S26_Plug_Auto_Reboot"
+  project_version: "0.0.1"
+  ### Device Settings ###
+  restore_mode_relay: RESTORE_DEFAULT_ON
+  
+# This should point to the public location of this yaml file.
+dashboard_import:
+  package_import_url: github://bnevets27/ESPHome-Projects/devices/relay/sonoff-plug-s26.yaml@main
+  import_full_config: true
+
+## Note: Package order matters, they are loaded top down so, lowerest in the list overrites values of above packages
+packages:
+  remote_package:
+    url: https://github.com/bnevets27/ESPHome-Projects/
+    ref: main
+    files:
+      - common/base-diagnostic-8266.yaml
+      - common/base-network.yaml
+    refresh: 0d
+
+esphome:
+  name: "${name}"
+  friendly_name: "${friendly_name}"
+  comment: "${device_description}"
+  project:
+    name: "${project_name}"
+    version: "${project_version}"
+  name_add_mac_suffix: true
+# Libraries and external_components add for the ping script
+  platformio_options:
+    lib_deps:
+      - ESP8266WiFi
+      - https://github.com/akaJes/AsyncPing#95ac7e4
+
+esp8266:
+  board: esp01_1m
+  early_pin_init: false  # Prevent the physical relay flipping on reboot.
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO0
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    name: "Button"
+    disabled_by_default: true
+    id: button1
+    filters:
+      - delayed_on: 10ms
+      - delayed_off: 10ms
+    on_press:
+      - switch.toggle: relay
+    on_click:
+      min_length: 15s
+      max_length: 60s
+      then:
+        button.press: factory_reset_all
+
+switch:
+  - platform: gpio
+    name: "Outlet"
+    pin: GPIO12
+    id: outlet
+    restore_mode: ${restore_mode_relay}
+
+status_led:
+  pin:
+    number: GPIO13
+    inverted: yes
+
+# The following is cut and pasted for the most part from: https://graha.ms/posts/blog/2023-05-08-esphome-autorestart/
+sensor:
+  - platform: ping
+    ip_address: "${ping_ip}"
+    id: ping_response
+    num_attempts: 1
+    timeout: 1sec
+    loss:
+      name: "Packet Loss to Internet"
+      id: loss
+    latency:
+      name: "Latency to Internet"
+      accuracy_decimals: 3
+    update_interval: 30s
+
+globals:
+  - id: last_power_cycle
+    type: time_t
+    restore_value: no
+    initial_value: '0'
+  - id: packet_loss_count
+    type: int
+    restore_value: no
+    initial_value: '0'
+
+# Ping time (in seconds)
+interval:
+  - interval: 60s
+    then:
+      - script.execute: ping_check
+
+# Script for checking packet loss
+script:
+  - id: ping_check
+    then:
+      - if:
+          condition:
+            # Condition checks if packet loss has occurred
+            lambda: 'return id(loss).state > 0;'
+          then:
+            # If packet loss has occurred, increment packet_loss_count
+            - lambda: |- 
+                id(packet_loss_count) += 1;
+                // If there are 3 consecutive packet losses, reset the count and execute power_cycle_relay script
+                if (id(packet_loss_count) >= 3) {
+                  id(packet_loss_count) = 0;
+                  id(power_cycle_relay).execute();
+                }
+          else:
+            # If there's no packet loss, reset the packet_loss_count
+            - lambda: |- 
+                id(packet_loss_count) = 0;
+
+  # Script for power cycling the relay
+  - id: power_cycle_relay
+    then:
+      - lambda: |-
+          time_t now = id(esphome_time).now().timestamp;
+          // Do not power cycle during the first 15 minutes after boot
+          if (now < 900) {
+            ESP_LOGD("power_cycle_relay", "Skipping power cycle during the first 15 minutes after boot");
+            return;
+          }
+          // Do not power cycle if the last power cycle was less than 15 minutes ago
+          if ((now - id(last_power_cycle)) < 900) {
+            ESP_LOGD("power_cycle_relay", "Skipping power cycle since it's been less than 15 minutes since the last one");
+            return;
+          }
+          // Update the last power cycle timestamp and execute the power cycle
+          id(last_power_cycle) = now;
+          ESP_LOGD("power_cycle_relay", "Power cycling the relay due to button press or packet loss.");
+          id(outlet).turn_off();          
+      - delay: 5s
+      - lambda: |- 
+          id(outlet).turn_on();
+
+time:
+  - platform: sntp
+    id: esphome_time
+    servers:
+      - 0.pool.ntp.org
