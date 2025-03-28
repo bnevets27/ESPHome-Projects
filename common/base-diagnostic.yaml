@@ -24,6 +24,9 @@ text_sensor:
     icon: mdi:clock
     entity_category: diagnostic
     device_class: timestamp
+  - platform: debug
+    reset_reason:
+      name: Reset Reason
   - platform: template
     name: "Hardware Info"
     entity_category: diagnostic
