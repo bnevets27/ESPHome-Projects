@@ -8,6 +8,7 @@ substitutions:
   name: "plug-s31"
   friendly_name: "Plug-S31 -"
   device_description: "Sonoff S31 Power Monitor"
+  device_info: "N/A"
   hardware_info: "Disabled-Relay|ESP8266_1M|CSE7766"
   #hardware_info: "Removed-Relay|ESP8266_1M|CSE7766"
   #### The Project information is required for adoption to work in the Dashboard. ####
