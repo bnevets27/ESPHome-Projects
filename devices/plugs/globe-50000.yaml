@@ -3,7 +3,7 @@
 
 substitutions:
   name: "globe-plug-50000"
-  friendly_name: "Plug-50000 -"
+  friendly_name: "Globe Plug 50000 -"
   device_description: "Globe 50000 Smart Plug"
   hardware_info: "ESP8266"
   #### The Project information is required for adoption to work in the Dashboard. ####
