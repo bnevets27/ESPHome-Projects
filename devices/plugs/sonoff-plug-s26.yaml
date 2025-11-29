@@ -5,6 +5,7 @@ substitutions:
   name: "sonoff-plug-s26"
   friendly_name: "Sonoff-Plug-S26 -"
   device_description: "Sonoff-S26 Plug"
+  device_info: "N/A"
   hardware_info: "ESP8285"
   #### The Project information is required for adoption to work in the Dashboard. ####
   project_name: "Sonoff-SBI.S26_Plug"
