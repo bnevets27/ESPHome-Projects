@@ -5,6 +5,7 @@ substitutions:
   name: "globe-plug-50329"
   friendly_name: "Plug-50329 -"
   device_description: "Globe 50329 Smart Plug"
+  device_info: "N/A"
   hardware_info: "WB2S"
   #### The Project information is required for adoption to work in the Dashboard. ####
   project_name: "Globe-SBI.50329_Plug"
