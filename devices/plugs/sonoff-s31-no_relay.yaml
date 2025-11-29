@@ -27,7 +27,7 @@ packages:
     url: https://github.com/bnevets27/ESPHome-Projects/
     ref: main
     files:
-      - common/base-diagnostic-8266.yaml
+      - common/base-diagnostic.yaml
       - common/base-network.yaml
     refresh: 0d
 
