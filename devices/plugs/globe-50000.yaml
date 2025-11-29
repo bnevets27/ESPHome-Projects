@@ -62,7 +62,7 @@ binary_sensor:
       - delayed_on: 10ms
       - delayed_off: 10ms
     on_press:
-      - switch.toggle: outlet
+      - switch.toggle: relay
     on_click:
       min_length: 15s
       max_length: 60s
@@ -73,8 +73,8 @@ switch:
   - platform: gpio
     name: "Outlet"
     device_class: outlet
-    id: outlet
-    pin: GPIO04
+    id: relay
+    pin: GPIO12
     icon: mdi:power-socket-us
     on_turn_on:
       - light.turn_on: led
