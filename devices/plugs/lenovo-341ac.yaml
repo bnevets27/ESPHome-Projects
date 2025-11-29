@@ -1,13 +1,46 @@
+# Device Info:
+#
+
 substitutions:
+  name: "lenovo-se341ac"
+  friendly_name: "Lenovo-341AC -"
+  device_description: "Lenovo SE-341AC Energy Monitoring Smart plug"
+  device_info: "N/A"
+  hardware_info: "Lenovo SE-341AC TYWE29 (ESP8266)"
+  #### The Project information is required for adoption to work in the Dashboard. ####
   project_name: "Lenovo.SE341AC_ESP8266"
   project_version: "0.0.1"
-  hardware_info: "Lenovo SE-341AC TYWE29 (ESP8266)"
-  device_info: "N/A"
+  ### Device Settings ###
   restore_mode_relay: RESTORE_DEFAULT_ON
 # Calibrations
   voltage_divider: "1726.380073800738"
   current_resistor: "0.0010996998497973922"
   current_multiply: "1.170994777892605"
+
+  
+# This should point to the public location of this yaml file.
+dashboard_import:
+  package_import_url: github://bnevets27/ESPHome-Projects/devices/plugs/lenovo-341ac.yaml@main
+  import_full_config: true
+
+## Note: Package order matters, they are loaded top down so, lowerest in the list overrites values of above packages
+packages:
+  remote_package:
+    url: https://github.com/bnevets27/ESPHome-Projects/
+    ref: main
+    files:
+      - common/base-diagnostic-8266.yaml
+      - common/base-network.yaml
+    refresh: 0d
+
+esphome:
+  name: "${name}"
+  friendly_name: "${friendly_name}"
+  comment: "${device_description}"
+  project:
+    name: "${project_name}"
+    version: "${project_version}"
+  name_add_mac_suffix: true
 
 esp8266:
   board: esp01_1m
@@ -21,10 +54,16 @@ binary_sensor:
     pin:
       number: GPIO03
       mode: INPUT_PULLUP
-      inverted: true
+      inverted: True
+    id: button_side
+    on_click:
+      min_length: 15s
+      max_length: 60s
+      then:
+        button.press: factory_reset_all
     name: "Button"
     on_press:
-      - switch.toggle: relay
+      - switch.toggle: relay      
 
 sensor:
   - platform: hlw8012
