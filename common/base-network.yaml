@@ -17,4 +17,3 @@ web_server:
 time:
   - platform: sntp
     id: time_sntp
-    timezone: "America/Toronto"
