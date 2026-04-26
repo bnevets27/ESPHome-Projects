@@ -48,8 +48,8 @@ logger:
     sensor: DEBUG # (Overide any global setting, to VERBOSE will spamming the cse7766 sensors)
 
 time:
-  - platform: sntp #(required for total_daily_energy)
-    id: time_sntp
+  #- platform: sntp #(required for total_daily_energy) inherited from base-network.yaml
+  - id: !extend time_sntp
 
 uart:
   rx_pin: RX
