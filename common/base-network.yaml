@@ -6,7 +6,10 @@ ota:
 captive_portal:
 
 wifi:
+  min_auth_mode: WPA2
+
   ap:
+    ap_timeout: 600s #default is 90s
 
 web_server:
   port: 80
