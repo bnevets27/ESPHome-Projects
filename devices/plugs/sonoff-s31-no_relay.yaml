@@ -52,7 +52,7 @@ logger:
 
 time:
   - platform: sntp #(required for total_daily_energy)
-    id: my_time
+    id: time_sntp
 
 uart:
   rx_pin: RX
