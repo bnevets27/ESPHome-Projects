@@ -7,8 +7,10 @@ captive_portal:
 
 wifi:
   min_auth_mode: WPA2
+  reboot_timeout: 30min #default is 15min
 
   ap:
+    reboot_timeout: 30min #default is 15min
     ap_timeout: 600s #default is 90s
 
 web_server:
