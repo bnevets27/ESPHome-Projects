@@ -14,8 +14,9 @@ substitutions:
   restore_mode_relay: RESTORE_DEFAULT_ON
   
 # This should point to the public location of this yaml file.
+# Looks like adopting on BK7231/LibreTiny is severly limited on url length and can't work currently
 dashboard_import:
-  package_import_url: github://bnevets27/e/g.yaml@main
+  package_import_url: github://bnevets27/ESPHome-Projects/devices/plugs/globe-50329.yaml@main
   import_full_config: true
 
 ## Note: Package order matters, they are loaded top down so, lowerest in the list overrites values of above packages
