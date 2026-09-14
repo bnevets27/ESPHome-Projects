@@ -88,33 +88,27 @@ binary_sensor:
 
     on_press:
       - switch.toggle: outlet_1
+      - switch.toggle: outlet_2
+      - switch.toggle: outlet_3
 
+  - platform: status
+    id: connection_status
+    internal: true
+
+    on_press:
+      - output.turn_on: led_blue
+
+    on_release:
+      - output.turn_off: led_blue
 
 output:
   - platform: gpio
-    id: led_1
+    id: led_blue
     pin:
       number: P11
       inverted: true
 
-  - platform: gpio
-    id: led_2
-    pin:
-      number: P8
-      inverted: true
-
-light:
-  - platform: binary
-    name: "LED 1"
-    id: led1
-    output: led_1
-    internal: true
-
-  - platform: binary
-    name: "LED 2"
-    id: led2
-    output: led_2
-    internal: true
+status_led:
   pin:
-    number: GPIO13
-    inverted: True
+    number: P8
+    inverted: true
