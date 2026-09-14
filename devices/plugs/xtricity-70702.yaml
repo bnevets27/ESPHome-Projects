@@ -1,0 +1,120 @@
+# Device Info:
+# https://jessar.ca/en-ca/products/wi-fi-power-bar-control-by-app-or-by-voice-6
+
+substitutions:
+  name: "xtricity-power-strip"
+  friendly_name: "Xtricity Power Strip -"
+  device_description: "Xtricity Power Strip 3 Port w/USB"
+  device_info: "N/A"
+  hardware_info: "CB2S"
+  #### The Project information is required for adoption to work in the Dashboard. ####
+  project_name: "Xtricity-SBI.70702_Power_Strip"
+  project_version: "0.0.1"
+  ### Device Settings ###
+  restore_mode_relay: RESTORE_DEFAULT_ON
+  
+# This should point to the public location of this yaml file.
+# Looks like adopting on BK7231/LibreTiny is severly limited on url length and can't work currently
+dashboard_import:
+  package_import_url: github://bnevets27/ESPHome-Projects/devices/plugs/xtricity-70702.yaml@main
+  import_full_config: true
+
+## Note: Package order matters, they are loaded top down so, lowerest in the list overrites values of above packages
+packages:
+  remote_package:
+    url: https://github.com/bnevets27/ESPHome-Projects/
+    ref: main
+    files:
+      - common/base-diagnostic.yaml
+      - common/base-network.yaml
+    refresh: 0d
+
+esphome:
+  name: "${name}"
+  friendly_name: "${friendly_name}"
+  comment: "${device_description}"
+  project:
+    name: "${project_name}"
+    version: "${project_version}"
+  name_add_mac_suffix: true
+
+wifi:
+  min_auth_mode: !remove
+
+bk72xx:
+  board: cb2s
+
+text_sensor:
+  - platform: libretiny
+    version:
+      name: LibreTiny Version
+      entity_category: diagnostic
+      
+# Enable logging
+logger:
+
+switch:
+  - platform: gpio
+    name: "Outlet 1"
+    id: outlet_1
+    pin: P24
+    restore_mode: RESTORE_DEFAULT_OFF
+
+  - platform: gpio
+    name: "Outlet 2"
+    id: outlet_2
+    pin: P26
+    restore_mode: RESTORE_DEFAULT_OFF
+
+  - platform: gpio
+    name: "Outlet 3"
+    id: outlet_3
+    pin: P6
+    restore_mode: RESTORE_DEFAULT_OFF
+
+
+binary_sensor:
+  - platform: gpio
+    name: "Power Button"
+    id: power_button
+    pin:
+      number: P10
+      mode: INPUT_PULLUP
+      inverted: true
+
+    filters:
+      - delayed_on: 20ms
+      - delayed_off: 20ms
+
+    on_press:
+      - switch.toggle: outlet_1
+
+
+output:
+  - platform: gpio
+    id: led_1
+    pin:
+      number: P11
+      inverted: true
+
+  - platform: gpio
+    id: led_2
+    pin:
+      number: P8
+      inverted: true
+
+light:
+  - platform: binary
+    name: "LED 1"
+    id: led1
+    output: led_1
+    internal: true
+
+  - platform: binary
+    name: "LED 2"
+    id: led2
+    output: led_2
+    internal: true
+  pin:
+    number: GPIO13
+    inverted: True
