@@ -72,7 +72,6 @@ switch:
     pin: P6
     restore_mode: RESTORE_DEFAULT_OFF
 
-
 binary_sensor:
   - platform: gpio
     name: "Power Button"
@@ -86,11 +85,22 @@ binary_sensor:
       - delayed_on: 20ms
       - delayed_off: 20ms
 
-    on_press:
-      - switch.toggle: outlet_1
-      - switch.toggle: outlet_2
-      - switch.toggle: outlet_3
+    # Normal press: toggle all three outlets
+    on_click:
+      - min_length: 50ms
+        max_length: 2s
+        then:
+          - switch.toggle: outlet_1
+          - switch.toggle: outlet_2
+          - switch.toggle: outlet_3
 
+      # Long press: factory reset
+      - min_length: 15s
+        max_length: 60s
+        then:
+          - button.press: factory_reset_all
+
+  # Tracks native API/Home Assistant connection
   - platform: status
     id: connection_status
     internal: true
